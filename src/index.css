@@ -1,0 +1,67 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+
+.stage {
+  position: relative;
+  width: 100vw;
+  height: 80vh;
+}
+
+.man {
+  position: absolute;
+  width: 5vw;
+  height: 5vh;
+  background-color: red;
+}
+
+.block, .fence, .place {
+  width: 5vw;
+  height: 5vh;
+}
+
+.block {
+  position: absolute;
+  background-color:blue;
+}
+
+.fence {
+  background-color:black;
+}
+
+.place {
+  background-color:green;
+}
+
+.row {
+  height: 5vh;
+}
+
+.cell {
+  width: 5vw;
+  height: 5vh;
+  border: 1px solid black;
+  box-sizing: border-box;
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+}
+
+.score {
+  position: absolute;
+  top: 5vh;
+  right: 5vw;
+}
+
+.victory {
+  position: fixed;
+  top: 5vh;
+  bottom: 5vh;
+  left: 5vw;
+  right: 5vw;
+  background: rgba(0,0,0, 0.7);
+  color: white;
+  text-align: center;
+}
