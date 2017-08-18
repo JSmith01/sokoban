@@ -10,6 +10,9 @@ const Navigation = props => (
             <li>
                 <Link to='/game'>Game</Link>
             </li>
+            <li>
+                <Link to='/map'>Map</Link>
+            </li>
         </ul>
     </nav>
 );
