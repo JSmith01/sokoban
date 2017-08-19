@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import Man from './Man';
 
 const _ = 0
 const O = 1;
@@ -18,10 +19,6 @@ const map = [
     [_, _, _, _, _, _, _, _, _, _],
     [_, _, _, _, _, _, _, _, _, _],
 ];
-
-const Man = ({x, y}) => (
-    <div className="man" style={{ top: y * 5 + 'vh', left: x * 5 + 'vw' }} />
-);
 
 const Cell = ({type}) => {
     let typeClass = '';
@@ -82,7 +79,7 @@ class Game extends Component {
             }
         }
 
-        return { x, y, width: map[y].length, height: map.length, map: mapCopy, blocks, moves: 0 };
+        return { x, y, width: map[y].length, height: map.length, map: mapCopy, blocks, moves: 0, direction: 'down' };
     }
 
     checkWin(blocks, map) {
@@ -114,7 +111,7 @@ class Game extends Component {
             this.setState(state => {
                 let x = Math.max(state.x - 1, 0);
                 if (state.map[state.y][x] !== X) {
-                    return { x, moves: state.moves + 1, blocks: this.moveBlock(state.x, state.y, -1, 0, state) };
+                    return { x, moves: state.moves + 1, blocks: this.moveBlock(state.x, state.y, -1, 0, state), direction: 'left' };
                 }
             });
         }
@@ -122,7 +119,7 @@ class Game extends Component {
             this.setState(state => {
                 let x = Math.min(state.x + 1, state.width - 1);
                 if (state.map[state.y][x] !== X) {
-                    return { x, moves: state.moves + 1, blocks: this.moveBlock(state.x, state.y, 1, 0, state) };
+                    return { x, moves: state.moves + 1, blocks: this.moveBlock(state.x, state.y, 1, 0, state), direction: 'right' };
                 }
             });
         }
@@ -130,7 +127,7 @@ class Game extends Component {
             this.setState(state => {
                 let y = Math.max(state.y - 1, 0);
                 if (state.map[y][state.x] !== X) {
-                    return { y, moves: state.moves + 1, blocks: this.moveBlock(state.x, state.y, 0, -1, state) };
+                    return { y, moves: state.moves + 1, blocks: this.moveBlock(state.x, state.y, 0, -1, state), direction: 'up' };
                 }
             });
         }
@@ -138,7 +135,7 @@ class Game extends Component {
             this.setState(state => {
                 let y = Math.min(state.y + 1, state.height - 1);
                 if (state.map[y][state.x] !== X) {
-                    return { y, moves: state.moves + 1, blocks: this.moveBlock(state.x, state.y, 0, 1, state) };
+                    return { y, moves: state.moves + 1, blocks: this.moveBlock(state.x, state.y, 0, 1, state), direction: 'down' };
                 }
             });
         }
@@ -156,9 +153,9 @@ class Game extends Component {
         return (
             <div>
                 <div className="stage">
-                    <Man x={this.state.x} y={this.state.y} />
                     <GameField map={this.state.map} />
                     <Blocks data={this.state.blocks} />
+                    <Man x={this.state.x} y={this.state.y} direction={this.state.direction} />
                 </div>
                 <div className="score">{this.state.moves}</div>
                 <div className="victory" style={{ opacity: this.checkWin(this.state.blocks, this.state.map) ? 1 : 0 }}>

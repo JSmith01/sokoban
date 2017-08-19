@@ -25,6 +25,7 @@ body {
 .block {
   position: absolute;
   background-color:blue;
+  transition: all 0.3s linear;
 }
 
 .fence {
@@ -75,3 +76,36 @@ body {
   left: 0;
   top: 0;
 }
+
+.move-pos {
+	position: absolute;
+	top: 0;
+  left: 0;
+  transition: all 0.3s linear;
+}
+
+#man {
+  background-image: url(/i/man.png);
+  height: 64px;
+  width: 64px;
+  background-position: 0 0;
+	animation: man-walk 0.6s steps(9) infinite;
+	position: absolute;
+}
+.up > #man {
+  background-position-y: 0;
+}
+.right > #man {
+  background-position-y: 64px;
+}
+.down > #man {
+  background-position-y: 128px;
+}
+.left > #man {
+  background-position-y: 192px;
+}
+@keyframes man-walk {
+	0% { background-position-x: 0; }
+	100% { background-position-x: -576px; }
+}
+
