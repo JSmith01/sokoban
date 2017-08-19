@@ -11,7 +11,7 @@ const map = [
     [_, _, _, _, X, X, _, _, _, _],
     [_, _, X, X, _, _, X, X, _, _],
     [_, _, X, _, _, O, _, X, _, _],
-    [_, _, X, _, _, _, O, _, X, _],
+    [_, _, _, _, _, _, O, _, X, _],
     [_, _, X, _, M, O, _, V, X, _],
     [_, _, X, _, _, _, _, V, X, _],
     [_, _, _, X, _, _, _, V, X, _],
@@ -86,58 +86,68 @@ class Game extends Component {
         return blocks.every(b => map[b.y][b.x] === V);
     }
 
-    moveBlock(x, y, dx, dy, state) {
+    cellHasBlock(x, y, blocks) {
+        return blocks.some(b => b.x === x && b.y === y);
+    }
+
+    canMoveBlock(dx, dy, state) {
+        let { x, y } = state;
+        if (!this.cellHasBlock(x + dx, y + dy, state.blocks)) {
+            // has no block
+            return false;
+        }
+
         let next = { x: x + 2 * dx, y: y + 2 * dy };
+
         if (next.x < 0 || next.y < 0 || next.y > state.map.length - 1 || next.x > state.map[y].length - 1) {
-            return state.blocks;
+            // near to edge
+            return false;
         }
-        let moveBlock = { x: x + dx, y: y + dy };
-        let blockIdx = state.blocks.findIndex(b => b.x === moveBlock.x && b.y === moveBlock.y);
-        if (blockIdx === -1) {
-            return state.blocks;
-        }
+
         if (state.map[next.y][next.x] !== X && state.blocks.every(b => b.x !== next.x || b.y !== next.y)) {
-            let newBlocks = [...state.blocks];
-            newBlocks.splice(blockIdx, 1, next);
-            return newBlocks;
+            // can move
+            return true;
         } else {
-            return state.blocks;
+            // next position for block is not empty
+            return false;
+        }
+    }
+
+    moveBlock(dx, dy, state) {
+        let { x, y } = state;
+        let blockIdx = state.blocks.findIndex(b => b.x === x + dx && b.y === y + dy);
+        let newBlocks = [...state.blocks];
+        newBlocks.splice(blockIdx, 1, { x: x + 2 * dx, y: y + 2 * dy });
+
+        return newBlocks;
+    }
+
+    makeMove(dx, dy, state) {
+        let { x, y } = state;
+        if (x + dx < 0 || y + dy < 0 || y + dy >= state.map.length || x + dx >= state.map[y].length || state.map[y + dy][x + dx] === X) {
+            return { x, y };
+        }
+
+        if (this.cellHasBlock(x + dx, y + dy, state.blocks)) {
+            return this.canMoveBlock(dx, dy, state) ? { x: x + dx, y: y + dy, blocks: this.moveBlock(dx, dy, state) } : { x, y };
+        } else {
+            return  { x: x + dx, y: y + dy };
         }
     }
 
     handleKeys(e) {
         e.preventDefault();
         if (e.keyCode === 37) {
-            this.setState(state => {
-                let x = Math.max(state.x - 1, 0);
-                if (state.map[state.y][x] !== X) {
-                    return { x, moves: state.moves + 1, blocks: this.moveBlock(state.x, state.y, -1, 0, state), direction: 'left' };
-                }
-            });
+            this.setState(state => ({ ...this.makeMove(-1, 0, state), direction: 'left' }));
         }
         if (e.keyCode === 39) {
-            this.setState(state => {
-                let x = Math.min(state.x + 1, state.width - 1);
-                if (state.map[state.y][x] !== X) {
-                    return { x, moves: state.moves + 1, blocks: this.moveBlock(state.x, state.y, 1, 0, state), direction: 'right' };
-                }
-            });
+            this.setState(state => ({ ...this.makeMove(1, 0, state), direction: 'right' }));
         }
         if (e.keyCode === 38) {
-            this.setState(state => {
-                let y = Math.max(state.y - 1, 0);
-                if (state.map[y][state.x] !== X) {
-                    return { y, moves: state.moves + 1, blocks: this.moveBlock(state.x, state.y, 0, -1, state), direction: 'up' };
-                }
-            });
+            this.setState(state => ({ ...this.makeMove(0, -1, state), direction: 'up' }));
         }
         if (e.keyCode === 40) {
-            this.setState(state => {
-                let y = Math.min(state.y + 1, state.height - 1);
-                if (state.map[y][state.x] !== X) {
-                    return { y, moves: state.moves + 1, blocks: this.moveBlock(state.x, state.y, 0, 1, state), direction: 'down' };
-                }
-            });
+            this.setState(state => ({ ...this.makeMove(0, 1, state), direction: 'down' }));
         }
     }
 
