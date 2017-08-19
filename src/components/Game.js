@@ -129,9 +129,10 @@ class Game extends Component {
         }
 
         if (this.cellHasBlock(x + dx, y + dy, state.blocks)) {
-            return this.canMoveBlock(dx, dy, state) ? { x: x + dx, y: y + dy, blocks: this.moveBlock(dx, dy, state) } : { x, y };
+            return this.canMoveBlock(dx, dy, state) ? 
+                { x: x + dx, y: y + dy, blocks: this.moveBlock(dx, dy, state), moves: state.moves + 1 } : { x, y };
         } else {
-            return  { x: x + dx, y: y + dy };
+            return  { x: x + dx, y: y + dy, moves: state.moves + 1 };
         }
     }
 
