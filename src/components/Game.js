@@ -20,6 +20,13 @@ const map = [
     [_, _, _, _, _, _, _, _, _, _],
 ];
 
+const Modal = ({ header, children, visible }) => !visible ? null : (
+    <div className="modal" style={{ opacity: visible ? 1 : 0 }}>
+        {header && <h1>{header}</h1>}
+        {children}
+    </div>
+);
+
 const Cell = ({type}) => {
     let typeClass = '';
     switch (type) {
@@ -137,18 +144,25 @@ class Game extends Component {
     }
 
     handleKeys(e) {
-        e.preventDefault();
-        if (e.keyCode === 37) {
-            this.setState(state => ({ ...this.makeMove(-1, 0, state), direction: 'left' }));
+        let key = e.keyCode;
+        if (key >= 37 && key <= 40) {
+            e.preventDefault();
         }
-        if (e.keyCode === 39) {
-            this.setState(state => ({ ...this.makeMove(1, 0, state), direction: 'right' }));
-        }
-        if (e.keyCode === 38) {
-            this.setState(state => ({ ...this.makeMove(0, -1, state), direction: 'up' }));
-        }
-        if (e.keyCode === 40) {
-            this.setState(state => ({ ...this.makeMove(0, 1, state), direction: 'down' }));
+        switch (key) {
+            case 37:
+                this.setState(state => ({ ...this.makeMove(-1, 0, state), direction: 'left' }));
+                break;
+            case 38:
+                this.setState(state => ({ ...this.makeMove(0, -1, state), direction: 'up' }));
+                break;
+            case 39:
+                this.setState(state => ({ ...this.makeMove(1, 0, state), direction: 'right' }));
+                break;
+            case 40:
+                this.setState(state => ({ ...this.makeMove(0, 1, state), direction: 'down' }));
+                break;
+            default:
+                break;
         }
     }
 
@@ -168,11 +182,13 @@ class Game extends Component {
                     <Blocks data={this.state.blocks} />
                     <Man x={this.state.x} y={this.state.y} direction={this.state.direction} />
                 </div>
-                <div className="score">{this.state.moves}</div>
-                <div className="victory" style={{ opacity: this.checkWin(this.state.blocks, this.state.map) ? 1 : 0 }}>
-                    <h1>Congratulations!</h1>
-                    <button onClick={() => this.restartGame()}>Restart Game</button>
+                <div className="score">
+                    <button style={{ marginRight: '10px' }} onClick={() => this.restartGame()}>Restart Game</button>
+                    Moves: {this.state.moves}
                 </div>
+                <Modal visible={this.checkWin(this.state.blocks, this.state.map)} header="Congratulations!">
+                    <button onClick={() => this.restartGame()}>Restart Game</button>
+                </Modal>
             </div>
         );
     }
