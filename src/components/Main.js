@@ -4,6 +4,7 @@ import Game from './Game';
 import NotFound from './NotFound';
 import Home from './Home';
 import TileMap from './TileMap';
+import Levels from './Levels';
 
 const Main = () => (
     <div>
@@ -11,6 +12,7 @@ const Main = () => (
             <Route exact path='/' component={Home} />
             <Route path='/game' component={Game} />
             <Route path='/map' component={TileMap} />
+            <Route path='/levels' component={Levels} />
             <Route component={NotFound} />
         </Switch>
     </div>

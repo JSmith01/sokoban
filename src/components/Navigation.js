@@ -13,6 +13,9 @@ const Navigation = props => (
             <li>
                 <Link to='/map'>Map</Link>
             </li>
+            <li>
+                <Link to='/levels'>Levels</Link>
+            </li>
         </ul>
     </nav>
 );
