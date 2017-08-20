@@ -66,14 +66,14 @@ function processLevel(levelData) {
 }
 
 function parseMap(text) {
-    let lines = text.split('\n').map(line => line.trim());
+    let lines = text.split('\n').map(line => line.trimRight());
 
     let levels = [];
     let currentLevel = 1;
     let levelData = [];
     for(let i = 0; i < lines.length; i++) {
-        let line = lines[i].trimRight();
-        if (line.trim() === '') {
+        let line = lines[i];
+        if (line === '') {
             continue;
         }
         if (line.charAt(0) !== ';') {

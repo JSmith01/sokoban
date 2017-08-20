@@ -1,24 +1,7 @@
 import React, {Component} from 'react';
 import Man from './Man';
-
-const _ = 0
-const O = 1;
-const M = 5;
-const X = 3;
-const V = 2;
-
-const map = [
-    [_, _, _, _, X, X, _, _, _, _],
-    [_, _, X, X, _, _, X, X, _, _],
-    [_, _, X, _, _, O, _, X, _, _],
-    [_, _, _, _, _, _, O, _, X, _],
-    [_, _, X, _, M, O, _, V, X, _],
-    [_, _, X, _, _, _, _, V, X, _],
-    [_, _, _, X, _, _, _, V, X, _],
-    [_, _, _, _, X, X, X, X, X, _],
-    [_, _, _, _, _, _, _, _, _, _],
-    [_, _, _, _, _, _, _, _, _, _],
-];
+import { _, O, M, X, V } from '../maps/index';
+import levels from '../maps/maps.json';
 
 const Modal = ({ header, children, visible }) => !visible ? null : (
     <div className="modal" style={{ opacity: visible ? 1 : 0 }}>
@@ -64,11 +47,24 @@ class Game extends Component {
         super(props);
         this.handleKeys = this.handleKeys.bind(this);
 
-        this.state = this.initGame(props.map);
+        this.state = this.initGameFromLevel(props.level);
     }
 
     restartGame() {
-        this.setState(this.initGame(this.props.map));
+        this.setState(this.initGameFromLevel(this.props.level));
+    }
+
+    initGameFromLevel(level) {
+        return {
+            x: level.x, 
+            y: level.y, 
+            width: level.width, 
+            height: level.height, 
+            map: level.map, 
+            blocks: [...level.blocks], 
+            moves: 0, 
+            direction: 'down'
+        };
     }
 
     initGame(map) {
@@ -194,6 +190,6 @@ class Game extends Component {
     }
 }
 
-const GameScreen = () => (<Game map={map} />);
+const GameScreen = () => (<Game level={levels[0]} />);
 
 export default GameScreen;
