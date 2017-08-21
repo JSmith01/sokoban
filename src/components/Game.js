@@ -35,11 +35,11 @@ const GameField = ({ map }) => {
     return (<div className="field">{cells}</div>);
 };
 
-const Block = ({ x, y }) => (<div className="block" style={{ top: y * 5 + 'vh', left: x * 5 + 'vw' }} />);
+const Block = ({ x, y, placed }) => (<div className={'block' + (placed ? ' placed': '')} style={{ top: y * 32 + 'px', left: x * 32 + 'px' }} />);
 
-const Blocks = ({ data }) => (
+const Blocks = ({ data, map }) => (
     <div className="blocks">
-        {data.map((b, i) => <Block key={i} {...b} />)}
+        {data.map((b, i) => <Block key={i} {...b} placed={map[b.y][b.x] === V} />)}
     </div>
 );
 
@@ -183,7 +183,7 @@ class Game extends Component {
                 <h2>{this.props.level.name}</h2>
                 <div className="stage">
                     <GameField map={this.state.map} />
-                    <Blocks data={this.state.blocks} />
+                    <Blocks data={this.state.blocks} map={this.state.map} />
                     <Man x={this.state.x} y={this.state.y} direction={this.state.direction} />
                 </div>
                 <div className="score">

@@ -22,44 +22,43 @@ nav > ul > li:last-child {
 
 .stage {
   position: relative;
-  width: 100vw;
-  /* height: 80vh; */
 }
 
 .man {
   position: absolute;
-  width: 5vw;
-  height: 5vh;
-  background-color: red;
-}
-
-.block, .fence, .place {
-  width: 5vw;
-  height: 5vh;
+  width: 64px;
+  height: 64px;
 }
 
 .block {
+  width: 32px;
+  height: 32px;
   position: absolute;
-  background-color:blue;
-  transition: all 0.3s linear;
+  background: url(/i/terrain.png) -704px -576px no-repeat;
+  -webkit-transition: left 0.3s linear, top 0.3s linear;
+  transition: left 0.3s linear, top 0.3s linear;
+}
+
+.block.placed {
+  background-position-x: -640px;
 }
 
 .fence {
-  background-color:black;
+  background: url(/i/terrain.png) -704px -704px no-repeat;
 }
 
 .place {
-  background-color:green;
+  background: url(/i/terrain.png) -64px -992px no-repeat;
 }
 
 .row {
-  height: 5vh;
+  height: 32px;
+  width: auto;
 }
 
 .cell {
-  width: 5vw;
-  height: 5vh;
-  border: 1px solid black;
+  width: 32px;
+  height: 32px;
   box-sizing: border-box;
   display: inline-block;
   margin: 0;
@@ -97,6 +96,7 @@ nav > ul > li:last-child {
 	position: absolute;
 	top: 0;
   left: 0;
+  -webkit-transition: all 0.3s linear;
   transition: all 0.3s linear;
 }
 

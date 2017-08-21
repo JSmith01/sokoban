@@ -26,9 +26,9 @@ const TileLayer = ({ tileSet, data, height, width }) => {
     for(let i = 0; i < height; i++) {
         let tiles = [];
         for(let j = 0; j < width; j++) {
-            tiles.push(<Tile tileSet={tileSet} num={data[i * width + j]} />);
+            tiles.push(<Tile key={j} tileSet={tileSet} num={data[i * width + j]} />);
         }
-        rows.push(<div className="tile-row" style={{ height: tileSet.tileheight + 'px' }}>{tiles}</div>);
+        rows.push(<div key={i} className="tile-row" style={{ height: tileSet.tileheight + 'px' }}>{tiles}</div>);
     }
 
     return <div className="tile-layer">{rows}</div>;
@@ -38,7 +38,7 @@ const VisibleTileLayers = ({ layers, tileSet }) => (
     <div className="tile-layers">
         {layers
             .filter(l => l.visible && l.type === 'tilelayer')
-            .map(l => (<TileLayer tileSet={tileSet} data={l.data} width={l.width} height={l.height} />))
+            .map((l, i) => (<TileLayer key={i} tileSet={tileSet} data={l.data} width={l.width} height={l.height} />))
         }
     </div>
 );
