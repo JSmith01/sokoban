@@ -4,6 +4,22 @@ body {
   font-family: sans-serif;
 }
 
+nav > ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+nav > ul > li {
+  padding: 5px;
+  margin-right: 10px;
+  display: inline-block;
+}
+
+nav > ul > li:last-child {
+  margin-right: 0;
+}
+
 .stage {
   position: relative;
   width: 100vw;

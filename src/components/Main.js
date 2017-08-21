@@ -10,7 +10,8 @@ const Main = () => (
     <div>
         <Switch>
             <Route exact path='/' component={Home} />
-            <Route path='/game' component={Game} />
+            <Route exact path='/game' component={Game} />
+            <Route path='/game/:id' component={Game} />
             <Route path='/map' component={TileMap} />
             <Route path='/levels' component={Levels} />
             <Route component={NotFound} />
