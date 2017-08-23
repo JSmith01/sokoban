@@ -1,23 +1,20 @@
 import React from 'react';
-import { Link } from 'react-router-dom'
+import { withRouter } from 'react-router-dom';
+import Menu from './Menu';
 
-const Navigation = props => (
+const mainNav = [
+    { name: 'Home', link: '/' },
+    { name: 'Game', link: '/game' },
+    { name: 'Map', link: '/map' },
+    { name: 'Levels', link: '/levels' },
+];
+
+const Navigation = ({ history }) => (
     <nav>
-        <ul>
-            <li>
-                <Link to='/'>Home</Link>
-            </li>
-            <li>
-                <Link to='/game'>Game</Link>
-            </li>
-            <li>
-                <Link to='/map'>Map</Link>
-            </li>
-            <li>
-                <Link to='/levels'>Levels</Link>
-            </li>
-        </ul>
+        <Menu onSelect={pos => history.push(mainNav[pos].link)}>
+                {mainNav.map(item => <span key={item.link}>{item.name}</span>)}
+        </Menu>
     </nav>
 );
 
-export default Navigation;
+export default withRouter(Navigation);

@@ -1,10 +1,8 @@
 import React, {Component} from 'react';
-import {withRouter} from 'react-router-dom';
 import Man from './Man';
 import { _, O, M, X, V } from '../maps/index';
-import levels from '../maps/maps.json';
 
-const Modal = ({ header, children, visible }) => !visible ? null : (
+export const Modal = ({ header, children, visible }) => !visible ? null : (
     <div className="modal" style={{ opacity: visible ? 1 : 0 }}>
         {header && <h1>{header}</h1>}
         {children}
@@ -147,6 +145,9 @@ class Game extends Component {
     }
 
     handleKeys(e) {
+        if (this.props.inactive) {
+            return;
+        }
         let key = e.keyCode;
         if (key >= 37 && key <= 40) {
             e.preventDefault();
@@ -179,7 +180,7 @@ class Game extends Component {
 
     render() {
         return (
-            <div>
+            <div className="game-screen">
                 <h2>{this.props.level.name}</h2>
                 <div className="stage">
                     <GameField map={this.state.map} />
@@ -187,7 +188,6 @@ class Game extends Component {
                     <Man x={this.state.x} y={this.state.y} direction={this.state.direction} />
                 </div>
                 <div className="score">
-                    <button style={{ marginRight: '10px' }} onClick={() => this.restartGame()}>Restart Game</button>
                     Moves: {this.state.moves}
                 </div>
                 <Modal visible={this.checkWin(this.state.blocks, this.state.map)} header="Congratulations!">
@@ -199,14 +199,4 @@ class Game extends Component {
     }
 }
 
-const GameScreen = ({ match, history }) => {
-    let levelIndex = match.params.id ? levels.findIndex(l => l.id === +match.params.id) : 0;
-    if (levelIndex === -1) {
-        levelIndex = 0;
-    }
-    const levelsQty = levels.length;
-
-    return <Game level={levels[levelIndex]} goNextLevel={() => history.push('/game/' + levels[(levelIndex + 1) % levelsQty].id)} />
-};
-
-export default withRouter(GameScreen);
+export default Game;

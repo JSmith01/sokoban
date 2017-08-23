@@ -1,11 +1,12 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import maps from '../maps/maps.json';
+import Menu from './Menu';
+import {withRouter} from 'react-router-dom';
 
-const Levels = () => (
-    <ul>
-        {maps.map(m => <li key={m.id}><Link to={'/game/' + m.id}>{m.name}</Link> - {m.width}x{m.height}</li>)}
-    </ul>
+const Levels = ({ history }) => (
+    <Menu onSelect={pos => history.push('/game/' + maps[pos].id)} onExit={() => history.push('/')}>
+        {maps.map(m => <span key={m.id}>{m.name} - {m.width}x{m.height}</span>)}
+    </Menu>
 );
 
-export default Levels;
+export default withRouter(Levels);
