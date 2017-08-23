@@ -58,8 +58,13 @@ ul.menu > li.selected {
 
 /* Game styles */
 
+.game-screen {
+  text-align: center;
+}
+
 .stage {
   position: relative;
+  display: inline-block;
 }
 
 .man {

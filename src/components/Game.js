@@ -68,7 +68,8 @@ class Game extends Component {
             map: level.map, 
             blocks: [...level.blocks], 
             moves: 0, 
-            direction: 'down'
+            direction: 'down',
+            won: false
         };
     }
 
@@ -178,6 +179,13 @@ class Game extends Component {
         window.removeEventListener('keydown', this.handleKeys);
     }
 
+    componentWillUpdate(nextProps, nextState) {
+        if (!nextState.won && this.checkWin(nextState.blocks, nextState.map) && nextProps.onWin) {
+            nextProps.onWin(nextState.moves);
+            this.setState({ won: true });
+        }
+    }
+
     render() {
         return (
             <div className="game-screen">
@@ -190,10 +198,6 @@ class Game extends Component {
                 <div className="score">
                     Moves: {this.state.moves}
                 </div>
-                <Modal visible={this.checkWin(this.state.blocks, this.state.map)} header="Congratulations!">
-                    <button onClick={() => this.restartGame()}>Restart Game</button>
-                    <button onClick={this.props.goNextLevel}>Proceed to the next level</button>
-                </Modal>
             </div>
         );
     }
