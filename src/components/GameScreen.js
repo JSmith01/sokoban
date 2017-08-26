@@ -40,6 +40,7 @@ class GameScreen extends Component {
         super(props);
         this.keyHandler = this.keyHandler.bind(this);
         this.gameAction = this.gameAction.bind(this);
+        this.victoryAction = this.victoryAction.bind(this);
         this.onWin = this.onWin.bind(this);
     }
 
