@@ -54,16 +54,16 @@ class Menu extends Component {
 
     componentDidMount() {
         document.body.addEventListener('keydown', this.keyHandler);
-        this.setState(({ scroll }) => ({ scroll: scroll + this.calculateScroll() }));
+        this.setState(({ position, scroll }) => ({ scroll: scroll + this.calculateScroll(position) }));
     }
 
     componentWillUnmount() {
         document.body.removeEventListener('keydown', this.keyHandler);
     }
 
-    calculateScroll() {
-        if (this.wrapper && this.els[this.state.position]) {
-            let selectionBox = this.els[this.state.position].getBoundingClientRect();
+    calculateScroll(position) {
+        if (this.wrapper && this.els[position]) {
+            let selectionBox = this.els[position].getBoundingClientRect();
             let wrapperBox = this.wrapper.getBoundingClientRect();
             if (selectionBox.top < wrapperBox.top) {
                 return wrapperBox.top - selectionBox.top;
@@ -78,7 +78,7 @@ class Menu extends Component {
 
     componentWillUpdate(nextProps, nextState) {
         if (this.state.position !== nextState.position) {
-            this.setState(({ scroll }) => ({ scroll: scroll + this.calculateScroll() }));
+            this.setState({ scroll: nextState.scroll + this.calculateScroll(nextState.position) });
         }
     }
 
