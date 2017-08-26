@@ -32,11 +32,25 @@ nav > ul > li.selected {
   background-color: lightblue;
 }
 
+.level-selector .menu-wrapper {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 50px;
+  top: 100px;
+}
+
+.menu-wrapper {
+  overflow: hidden;
+  max-height: 100vh;
+}
+
 /* Game menu styles */
 ul.menu {
   margin: 0;
   padding: 0;
   list-style: none;
+  transition: transform 0.1s ease-in;
 }
 
 ul.menu > li {

@@ -3,10 +3,9 @@ import { withRouter } from 'react-router-dom';
 import Menu from './Menu';
 
 const mainNav = [
-    { name: 'Home', link: '/' },
-    { name: 'Game', link: '/game' },
+    { name: 'Start Game', link: '/game' },
+    { name: 'Select Level', link: '/levels' },
     { name: 'Map', link: '/map' },
-    { name: 'Levels', link: '/levels' },
 ];
 
 const Navigation = ({ history }) => (

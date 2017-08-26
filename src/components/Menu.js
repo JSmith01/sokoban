@@ -7,10 +7,15 @@ class Menu extends Component {
         onExit: PropTypes.func,
         horizontal: PropTypes.bool,
         inactive: PropTypes.bool
-    }
+    };
+
+    wrapper = null;
+
+    els = [];
 
     state = {
-        position: 0
+        position: 0,
+        scroll: 0,
     };
 
     constructor(props) {
@@ -19,7 +24,7 @@ class Menu extends Component {
     }
 
     keyHandler(e) {
-        if (!!this.props.inactive) {
+        if (this.props.inactive) {
             return;
         }
 
@@ -33,6 +38,7 @@ class Menu extends Component {
                 move = -1; // eslint-disable-next-line
             case (40 + keyShift):
                 this.setState({ position: limit(this.state.position + move) });
+                e.preventDefault();
                 break;
             case 13:
                 this.props.onSelect(this.state.position);
@@ -48,19 +54,47 @@ class Menu extends Component {
 
     componentDidMount() {
         document.body.addEventListener('keydown', this.keyHandler);
+        this.setState(({ scroll }) => ({ scroll: scroll + this.calculateScroll() }));
     }
 
     componentWillUnmount() {
         document.body.removeEventListener('keydown', this.keyHandler);
     }
 
+    calculateScroll() {
+        if (this.wrapper && this.els[this.state.position]) {
+            let selectionBox = this.els[this.state.position].getBoundingClientRect();
+            let wrapperBox = this.wrapper.getBoundingClientRect();
+            if (selectionBox.top < wrapperBox.top) {
+                return wrapperBox.top - selectionBox.top;
+            }
+            if (selectionBox.bottom > wrapperBox.bottom) {
+                return wrapperBox.bottom - selectionBox.bottom;
+            }
+        }
+
+        return 0;
+    }
+
+    componentWillUpdate(nextProps, nextState) {
+        if (this.state.position !== nextState.position) {
+            this.setState(({ scroll }) => ({ scroll: scroll + this.calculateScroll() }));
+        }
+    }
+
     render() {
         return (
-            <ul className="menu">
-                {this.props.children.map((child, i) => (
-                        <li key={i} className={i === this.state.position ? 'selected' : ''}>{child}</li>
+            <div className="menu-wrapper" ref={wrapper => this.wrapper = wrapper}>
+                <ul className="menu" style={{transform: 'translateY(' + this.state.scroll + 'px)'}}>
+                    {this.props.children.map((child, i) => (
+                            <li key={i}
+                                className={i === this.state.position ? 'selected' : ''}
+                                ref={el => this.els[i] = el}>
+                                {child}
+                            </li>
                     ))}
-            </ul>
+                </ul>
+            </div>
         );
     }
 }
