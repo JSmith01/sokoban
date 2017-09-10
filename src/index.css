@@ -182,3 +182,8 @@ ul.menu > li.selected {
 	100% { background-position-x: -576px; }
 }
 
+.radio-player {
+  position: absolute;
+  right: 5vw;
+  bottom: 5vh;
+}
