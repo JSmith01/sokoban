@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import Man from './Man';
-import { _, O, M, X, V } from '../maps/index';
+import { O, X, V } from '../maps/index';
 
 export const Modal = ({ header, children, visible }) => !visible ? null : (
     <div className="modal" style={{ opacity: visible ? 1 : 0 }}>
@@ -45,16 +45,20 @@ class Game extends Component {
     constructor(props) {
         super(props);
         this.handleKeys = this.handleKeys.bind(this);
+        this.undoMove = this.undoMove.bind(this);
 
+        this.moveHistory = [];
         this.state = this.initGameFromLevel(props.level);
     }
 
     restartGame() {
+        this.moveHistory = [];
         this.setState(this.initGameFromLevel(this.props.level));
     }
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.level !== this.props.level) {
+            this.moveHistory = [];
             this.setState(this.initGameFromLevel(nextProps.level));
         }
     }
@@ -71,24 +75,6 @@ class Game extends Component {
             direction: 'down',
             won: false
         };
-    }
-
-    initGame(map) {
-        let mapCopy = map.map(r => [...r]);
-        let y = map.findIndex(r => r.includes(M));
-        let x = map[y].indexOf(M);
-        mapCopy[y][x] = _;
-        let blocks = [];
-        for (let i = 0; i < map.length; i++) {
-            for (let j = 0; j < map[i].length; j++) {
-                if (map[i][j] === O) {
-                    blocks.push({ x: j, y: i });
-                    mapCopy[i][j] = _;
-                }
-            }
-        }
-
-        return { x, y, width: map[y].length, height: map.length, map: mapCopy, blocks, moves: 0, direction: 'down' };
     }
 
     checkWin(blocks, map) {
@@ -113,13 +99,7 @@ class Game extends Component {
             return false;
         }
 
-        if (state.map[next.y][next.x] !== X && state.blocks.every(b => b.x !== next.x || b.y !== next.y)) {
-            // can move
-            return true;
-        } else {
-            // next position for block is not empty
-            return false;
-        }
+        return state.map[next.y][next.x] !== X && state.blocks.every(b => b.x !== next.x || b.y !== next.y);
     }
 
     moveBlock(dx, dy, state) {
@@ -132,17 +112,58 @@ class Game extends Component {
     }
 
     makeMove(dx, dy, state) {
-        let { x, y } = state;
+        let { x, y, direction } = state;
         if (x + dx < 0 || y + dy < 0 || y + dy >= state.map.length || x + dx >= state.map[y].length || state.map[y + dy][x + dx] === X) {
             return { x, y };
         }
 
         if (this.cellHasBlock(x + dx, y + dy, state.blocks)) {
-            return this.canMoveBlock(dx, dy, state) ? 
-                { x: x + dx, y: y + dy, blocks: this.moveBlock(dx, dy, state), moves: state.moves + 1 } : { x, y };
+            let canMoveBlock = this.canMoveBlock(dx, dy, state);
+            if (canMoveBlock) {
+                let blockIdx = state.blocks.findIndex(b => b.x === x + dx && b.y === y + dy);
+                this.moveHistory.push({ x, y, direction, blockIdx, bx: x + dx, by: y + dy });
+                return { x: x + dx, y: y + dy, blocks: this.moveBlock(dx, dy, state), moves: state.moves + 1 };
+            } else {
+                return { x, y };
+            }
         } else {
+            this.moveHistory.push({ x, y, direction });
             return  { x: x + dx, y: y + dy, moves: state.moves + 1 };
         }
+    }
+
+    undoMove(state) {
+        if (this.moveHistory.length > 0) {
+            let prev = this.moveHistory.pop();
+            if (prev.hasOwnProperty('blockIdx')) {
+                let blocks = [...state.blocks];
+                blocks.splice(prev.blockIdx, 1, { x: prev.bx, y: prev.by });
+                return { x: prev.x, y: prev.y, blocks, direction: prev.direction };
+            } else {
+                return { x: prev.x, y: prev.y, direction: prev.direction };
+            }
+        }
+    }
+
+    moveTo(direction) {
+        let dx = 0, dy = 0;
+        switch (direction) {
+            case 'left':
+                dx = -1;
+                break;
+            case 'right':
+                dx = 1;
+                break;
+            case 'up':
+                dy = -1;
+                break;
+            case 'down':
+                dy = 1;
+                break;
+            default:
+        }
+
+        return state => ({ ...this.makeMove(dx, dy, state), direction });
     }
 
     handleKeys(e) {
@@ -150,24 +171,26 @@ class Game extends Component {
             return;
         }
         let key = e.keyCode;
-        if (key >= 37 && key <= 40) {
+        if ((key >= 37 && key <= 40) || key === 49) {
             e.preventDefault();
         }
         switch (key) {
+            case 49:
+                this.setState(this.undoMove);
+                break;
             case 37:
-                this.setState(state => ({ ...this.makeMove(-1, 0, state), direction: 'left' }));
+                this.setState(this.moveTo('left'));
                 break;
             case 38:
-                this.setState(state => ({ ...this.makeMove(0, -1, state), direction: 'up' }));
+                this.setState(this.moveTo('up'));
                 break;
             case 39:
-                this.setState(state => ({ ...this.makeMove(1, 0, state), direction: 'right' }));
+                this.setState(this.moveTo('right'));
                 break;
             case 40:
-                this.setState(state => ({ ...this.makeMove(0, 1, state), direction: 'down' }));
+                this.setState(this.moveTo('down'));
                 break;
             default:
-                break;
         }
     }
 
@@ -196,7 +219,7 @@ class Game extends Component {
                     <Man x={this.state.x} y={this.state.y} direction={this.state.direction} />
                 </div>
                 <div className="score">
-                    Moves: {this.state.moves}
+                    <button onClick={e => this.setState(this.undoMove)}>Undo</button> Moves: {this.state.moves}
                 </div>
             </div>
         );

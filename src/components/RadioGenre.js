@@ -3,7 +3,6 @@ import {withRouter} from 'react-router-dom';
 import Menu from './Menu';
 import genres from '../radio/genres.json';
 import radios from '../radio/radios.json';
-import RadioPlayer from './RadioPlayer';
 import { connect } from 'react-redux';
 import { setRadio } from '../actions';
 
