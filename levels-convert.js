@@ -51,9 +51,15 @@ function processLevel(levelData) {
                     y = i;
                     row.push(MAP_EMPTY);
                     break;
+                case '+':
+                    x = j;
+                    y = i;
+                    row.push(MAP_TARGET);
+                    break;
                 default:
                     if (j < levelData[i].length) {
-                        console.log('Unknown symbol in map - "' + levelData[i].charCodeAt(j) + '", position { x: ' + j + ', y: ' + i + ' }');
+                        console.log('Unknown symbol in map - code: ' + levelData[i].charCodeAt(j) +
+                            ', position { x: ' + j + ', y: ' + i + ' }');
                         console.log('Line is: ' + levelData[i]);
                     }
                     row.push(MAP_EMPTY);
