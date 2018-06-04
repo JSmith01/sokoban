@@ -19,6 +19,7 @@
     "eject": "react-scripts eject"
   },
   "devDependencies": {
+    "jest": "^23.1.0",
     "request-promise": "^4.2.1",
     "xml2js": "^0.4.19"
   }
