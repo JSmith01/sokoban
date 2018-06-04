@@ -4,9 +4,6 @@ import RadioPlayer from "./components/RadioPlayer";
 
 const App = () => (
     <div className="App">
-        <header>
-            <h2>Sokoban</h2>
-        </header>
         <Main />
         <RadioPlayer />
     </div>

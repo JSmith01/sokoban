@@ -4,6 +4,24 @@ body {
   font-family: sans-serif;
 }
 
+.main-menu header h1 {
+  text-align: center;
+  font-size: 30px;
+  font-weight: bold;
+}
+
+.radio-genre-list,
+.radio-list {
+  display: flex;
+  flex-direction: column;
+  max-height: 100vh;
+}
+
+.radio-genre-list h1,
+.radio-list h3 {
+  flex-grow: 0;
+}
+
 nav > ul {
   margin: 0;
   padding: 0;

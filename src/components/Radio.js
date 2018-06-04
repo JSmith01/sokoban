@@ -9,7 +9,7 @@ const genres = [
 ].concat(genresRaw.map(g => ({ id: g.id, name: g.name + ' (' + g.stations.length + ')' })));
 
 const Radio = ({ history }) => (
-    <div>
+    <div className='radio-list'>
         <h3>List of radio station genres</h3>
         <Menu onSelect={pos => history.push('/radio/' + genres[pos].id)} onExit={() => history.push('/')}>
             {genres.map(g => <span key={g.id}>{g.name}</span>)}

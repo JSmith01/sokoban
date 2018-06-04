@@ -26,7 +26,7 @@ const RadioContainer = ({ setRadio, radio, match, history }) => {
 const RadioGenre = ({ genre, onEnter, onExit }) => {
     let radiosList = genre.stations.map(id => radios[id]);
     return (
-        <div>
+        <div className='radio-genre-list'>
             <h1>{genre.name}</h1>
             <Menu onSelect={pos => onEnter(radiosList[pos])} onExit={onExit}>
                 {radiosList.map(radio => <span key={radio.id}>{radio.name} ({radio.genre})</span>)}
