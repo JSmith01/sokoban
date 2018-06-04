@@ -1,8 +1,6 @@
 import React, {Component} from 'react';
-import Man from './render/Man';
-import GameField from './render/GameField';
-import Blocks from './render/Blocks';
 import { X, V } from '../maps/index';
+import GameStage from './render/GameStage';
 
 class Game extends Component {
     constructor(props) {
@@ -176,11 +174,13 @@ class Game extends Component {
         return (
             <div className="game-screen">
                 <h2>{this.props.level.name}</h2>
-                <div className="stage">
-                    <GameField map={this.state.map} />
-                    <Blocks data={this.state.blocks} map={this.state.map} />
-                    <Man x={this.state.x} y={this.state.y} direction={this.state.direction} />
-                </div>
+                <GameStage
+                    map={this.state.map}
+                    blocks={this.state.blocks}
+                    manX={this.state.x}
+                    manY={this.state.y}
+                    manDirection={this.state.direction}
+                />
                 <div className="score">
                     <button onClick={e => this.setState(this.undoMove)}>Undo</button> Moves: {this.state.moves}
                 </div>
