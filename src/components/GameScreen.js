@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import levels from '../maps/maps.json';
 import Menu from './Menu';
-import Game, { Modal } from './Game';
+import Game from './Game';
+import Modal from './render/Modal';
 import {withRouter} from 'react-router-dom';
 
 const EscapeScreen = ({ visible, onSelect }) => (

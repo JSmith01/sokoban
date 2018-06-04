@@ -6,7 +6,6 @@ const mainNav = [
     { name: 'Start Game', link: '/game' },
     { name: 'Select Level', link: '/levels' },
     { name: 'Map', link: '/map' },
-    { name: 'Radio', link: '/radio' },
 ];
 
 const Navigation = ({ history }) => (

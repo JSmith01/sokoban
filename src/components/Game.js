@@ -1,45 +1,8 @@
 import React, {Component} from 'react';
-import Man from './Man';
-import { O, X, V } from '../maps/index';
-
-export const Modal = ({ header, children, visible }) => !visible ? null : (
-    <div className="modal" style={{ opacity: visible ? 1 : 0 }}>
-        {header && <h1>{header}</h1>}
-        {children}
-    </div>
-);
-
-const Cell = ({type}) => {
-    let typeClass = '';
-    switch (type) {
-        case O: typeClass = 'block'; break;
-        case X: typeClass = 'fence'; break;
-        case V: typeClass = 'place'; break;
-        default: typeClass = '';
-    }
-    return (<div className={"cell " + typeClass} />)
-};
-
-const GameField = ({ map }) => {
-    let cells = [];
-    for (let i = 0; i < map.length; i++) {
-        let row = [];
-        for (let j = 0; j < map[i].length; j++) {
-            row.push(<Cell key={j} type={map[i][j]} />);
-        }
-        cells.push(<div key={i} className="row">{row}</div>);
-    }
-
-    return (<div className="field">{cells}</div>);
-};
-
-const Block = ({ x, y, placed }) => (<div className={'block' + (placed ? ' placed': '')} style={{ top: y * 32 + 'px', left: x * 32 + 'px' }} />);
-
-const Blocks = ({ data, map }) => (
-    <div className="blocks">
-        {data.map((b, i) => <Block key={i} {...b} placed={map[b.y][b.x] === V} />)}
-    </div>
-);
+import Man from './render/Man';
+import GameField from './render/GameField';
+import Blocks from './render/Blocks';
+import { X, V } from '../maps/index';
 
 class Game extends Component {
     constructor(props) {
