@@ -4,7 +4,10 @@ const MAP_CRATE = 1;
 const MAP_MAN = 5;
 const MAP_FENCE = 3;
 const MAP_TARGET = 2;
-
+const MAP_OUTLINED = 9;
+const cloneDeep = v => typeof v === 'object' && v !== null 
+    ? Object.keys(v).reduce((o, n) => { o[n] = cloneDeep(v[n]); return o; }, v instanceof Array ? [] :  Object.create(v.__proto__))
+    : v;
 
 if (process.argv.length < 3) {
     console.log('Usage: node levels-convert.js levels.txt [levels.json]');
@@ -68,7 +71,61 @@ function processLevel(levelData) {
         map.push(row);
     }
 
-    return { map, blocks, height, width, x, y }
+    return { map: getMapWithOutline(map), blocks, height, width, x, y }
+}
+
+function addBorderToMap(map) {
+    map.forEach(line => {
+        line.unshift(MAP_EMPTY);
+        line.push(MAP_EMPTY);
+    });
+    let emptyLine = new Array(map[0].length).fill(MAP_EMPTY);
+    map.unshift(emptyLine);
+    map.push(emptyLine);
+}
+
+function fillOutline(map, x, y) {
+    if (map[x][y] === MAP_OUTLINED || map[x][y] !== MAP_EMPTY) {
+        return;
+    }
+
+    map[x][y] = MAP_OUTLINED;
+
+    if (x > 0) fillOutline(map, x - 1, y);
+    if (x < map.length - 1) fillOutline(map, x + 1, y);
+    if (y > 0) fillOutline(map, x, y - 1);
+    if (y <map[0].length - 1) fillOutline(map, x, y + 1);
+}
+
+function removeBorderFromMap(map) {
+    map.shift();
+    map.pop();
+
+    map.forEach(line => {
+        line.shift();
+        line.pop();
+    });
+}
+
+function getMapWithOutline(map) {
+    let outline = cloneDeep(map);
+    addBorderToMap(outline);
+    fillOutline(outline, 0, 0);
+    removeBorderFromMap(outline);
+
+    return outline;
+}
+
+function getOutline(map) {
+    let outline = getMapWithOutline(map);
+
+    for (let i = 0; i < outline.length; i++) {
+        for (let j = 0; j < outline[i].length; j++) {
+            outline[i][j] = outline[i][j] === MAP_OUTLINED ? MAP_OUTLINED : 0;
+        }
+    }
+
+    return outline;
 }
 
 function parseMap(text) {

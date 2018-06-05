@@ -94,11 +94,16 @@ ul.menu > li.selected {
 
 .game-screen {
   text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
 
 .stage {
   position: relative;
   display: inline-block;
+  transform: scale(2);
 }
 
 .man {
@@ -125,7 +130,16 @@ ul.menu > li.selected {
 }
 
 .place {
-  background: url(/i/terrain.png) -64px -992px no-repeat;
+  background: url(/i/terrain.png) -320px -448px no-repeat;
+}
+
+.grass-field {
+  position: absolute;
+  z-index: -5;
+}
+
+.grass-field .grass {
+  background: url(/i/terrain.png) -32px -736px no-repeat;
 }
 
 .row {

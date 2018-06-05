@@ -3,6 +3,7 @@ export const O = 1;
 export const M = 5;
 export const X = 3;
 export const V = 2;
+export const OUTLINED = 9;
 
 const map = [
     [_, _, _, _, X, X, _, _, _, _],
