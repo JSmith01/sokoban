@@ -1,12 +1,11 @@
 const util = require('util');
 const fs = require('fs');
 
-const rp = require('request-promise');
 const { parseString } = require('xml2js');
 
 const parseXml = util.promisify(parseString);
 
-rp('http://dir.xiph.org/yp.xml').then(parseXml)
+fetch('http://dir.xiph.org/yp.xml').then(r => r.text()).then(parseXml)
 	.then(o => {
         const genres = [];
         let lastGenreId = 1;

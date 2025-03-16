@@ -1,6 +1,6 @@
 import React from 'react';
-import Main from './components/Main';
-import RadioPlayer from "./components/RadioPlayer";
+import Main from './components/Main.jsx';
+import RadioPlayer from './components/RadioPlayer.jsx';
 
 const App = () => (
     <div className="App">

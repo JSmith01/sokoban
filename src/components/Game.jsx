@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import Man from './Man';
+import Man from './Man.jsx';
 import { O, X, V } from '../maps/index';
 
 export const Modal = ({ header, children, visible }) => !visible ? null : (

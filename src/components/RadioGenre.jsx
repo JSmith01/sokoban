@@ -1,13 +1,15 @@
 import React from 'react';
-import {withRouter} from 'react-router-dom';
-import Menu from './Menu';
+import Menu from './Menu.jsx';
 import genres from '../radio/genres.json';
 import radios from '../radio/radios.json';
 import { connect } from 'react-redux';
 import { setRadio } from '../actions';
+import { navigate } from 'wouter/use-hash-location';
+import { useParams } from 'wouter';
 
-const RadioContainer = ({ setRadio, radio, match, history }) => {
-    let genreId = +match.params.id;
+const RadioContainer = ({ setRadio, radio }) => {
+    const params = useParams();
+    let genreId = +params.id;
     let genre = genres.find(g => g.id === genreId);
     if (!genre) {
         return <h1>No radio with this id</h1>;
@@ -15,9 +17,10 @@ const RadioContainer = ({ setRadio, radio, match, history }) => {
 
     return (
         <div>
-            <RadioGenre genre={genre}
-                        onEnter={newRadio => setRadio(radio !== newRadio ? newRadio : null)}
-                        onExit={() => history.push('/radio')}/>
+            <RadioGenre
+                genre={genre}
+                onEnter={newRadio => setRadio(radio !== newRadio ? newRadio : null)}
+                onExit={() => navigate('/radio')}/>
         </div>
     );
 };
@@ -39,4 +42,4 @@ const mapStateToProps = state => ({ radio: state.radio });
 
 const mapDispatchToProps = dispatch => ({ setRadio: radio => dispatch(setRadio(radio)) });
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(RadioContainer));
+export default connect(mapStateToProps, mapDispatchToProps)(RadioContainer);

@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import levels from '../maps/maps.json';
-import Menu from './Menu';
-import Game, { Modal } from './Game';
-import {withRouter} from 'react-router-dom';
+import Menu from './Menu.jsx';
+import Game, { Modal } from './Game.jsx';
+import { navigate } from 'wouter/use-hash-location';
 
 const EscapeScreen = ({ visible, onSelect }) => (
     <Modal header="Game menu" visible={visible}>
@@ -58,7 +58,7 @@ class GameScreen extends Component {
     }
 
     goToNextLevel() {
-        this.props.history.push('/game/' + this.getNextLevelId(this.props.match.params.id));
+        navigate('/game/' + this.getNextLevelId(this.props.levelId));
         this.setState({ won: false, moves: 0 });
     }
 
@@ -71,7 +71,7 @@ class GameScreen extends Component {
                 }
                 break;
             case 2: // to main screen
-                this.props.history.push('/');
+                navigate('/');
                 break;
             case 3: // exit game
                 break;
@@ -89,7 +89,7 @@ class GameScreen extends Component {
                 }
                 break;
             case 2: // to main screen
-                this.props.history.push('/');
+                navigate('/');
                 break;
             case 3: // exit game
                 break;
@@ -125,7 +125,7 @@ class GameScreen extends Component {
     }
 
     render() {
-        let level = levels[this.getLevelIdx(this.props.match.params.id)];
+        let level = levels[this.getLevelIdx(this.props.levelId)];
     
         return (
             <div>
@@ -140,4 +140,4 @@ class GameScreen extends Component {
     }
 }
 
-export default withRouter(GameScreen);
+export default GameScreen;

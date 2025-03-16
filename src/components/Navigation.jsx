@@ -1,6 +1,6 @@
 import React from 'react';
-import { withRouter } from 'react-router-dom';
-import Menu from './Menu';
+import Menu from './Menu.jsx';
+import { navigate } from 'wouter/use-hash-location';
 
 const mainNav = [
     { name: 'Start Game', link: '/game' },
@@ -9,12 +9,12 @@ const mainNav = [
     { name: 'Radio', link: '/radio' },
 ];
 
-const Navigation = ({ history }) => (
+const Navigation = () => (
     <nav>
-        <Menu onSelect={pos => history.push(mainNav[pos].link)}>
+        <Menu onSelect={pos => navigate(mainNav[pos].link)}>
                 {mainNav.map(item => <span key={item.link}>{item.name}</span>)}
         </Menu>
     </nav>
 );
 
-export default withRouter(Navigation);
+export default Navigation;
